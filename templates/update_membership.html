@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-person-badge me-2"></i>Update Membership</h4>
+<div class="card">
+  <div class="card-header">Membership Management</div>
+  <div class="card-body">
+    <form method="POST">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Membership Number <span class="text-danger">*</span></label>
+          <input type="text" name="membership_no" class="form-control" placeholder="e.g. MEM001" required>
+          <small class="text-muted">Enter Membership No to populate member details.</small>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Extension Duration</label>
+          <select name="duration" class="form-select">
+            <option value="6" selected>6 Months (Default)</option>
+            <option value="12">1 Year</option>
+            <option value="24">2 Years</option>
+          </select>
+        </div>
+
+        {% if member %}
+        <div class="col-12">
+          <div class="alert alert-info">
+            <i class="bi bi-person-check me-2"></i>
+            <strong>Member Found:</strong> {{ member.name }}
+            &nbsp;|&nbsp;<strong>Membership No:</strong> {{ member.membership_no }}
+            &nbsp;|&nbsp;<strong>Current Expiry:</strong> {{ member.expiry_date }}
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="col-12 d-flex gap-2 flex-wrap">
+          <button type="submit" name="action" value="extend" class="btn btn-success px-4">
+            <i class="bi bi-calendar-plus me-2"></i>Extend Membership
+          </button>
+          <button type="submit" name="action" value="cancel" class="btn btn-danger px-4"
+            onclick="return confirm('Are you sure you want to cancel this membership?')">
+            <i class="bi bi-x-circle me-2"></i>Cancel Membership
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-header"><i class="bi bi-info-circle me-2"></i>Available Members</div>
+  <div class="card-body">
+    <span class="badge bg-primary me-2 p-2">MEM001 - Rahul Sharma</span>
+    <span class="badge bg-primary p-2">MEM002 - Priya Singh</span>
+  </div>
+</div>
+{% endblock %}

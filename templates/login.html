@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login - Library Management System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+  body { background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1565c0 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Segoe UI', sans-serif; }
+  .login-card { background: white; border-radius: 20px; padding: 40px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .login-card .logo { background: #1a237e; color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px; }
+  .login-card h2 { color: #1a237e; font-weight: 700; text-align: center; margin-bottom: 4px; }
+  .login-card p { color: #607d8b; text-align: center; margin-bottom: 28px; }
+  .form-control { border-radius: 10px; padding: 12px 16px; border: 2px solid #e0e0e0; }
+  .form-control:focus { border-color: #1a237e; box-shadow: 0 0 0 3px rgba(26,35,126,0.15); }
+  .btn-login { background: #1a237e; color: white; border: none; border-radius: 10px; padding: 13px; font-weight: 600; font-size: 1rem; width: 100%; }
+  .btn-login:hover { background: #283593; color: white; }
+  .hint-box { background: #f3f4fd; border-radius: 10px; padding: 12px 16px; margin-top: 20px; font-size: 0.85rem; color: #5c6bc0; }
+  .input-group-text { background: #f3f4fd; border: 2px solid #e0e0e0; border-right: none; border-radius: 10px 0 0 10px; }
+  .input-group .form-control { border-left: none; border-radius: 0 10px 10px 0; }
+  .toggle-pw { cursor: pointer; background: #f3f4fd; border: 2px solid #e0e0e0; border-left: none; border-radius: 0 10px 10px 0; padding: 0 14px; }
+</style>
+</head>
+<body>
+<div class="login-card">
+  <div class="logo"><i class="bi bi-book-half"></i></div>
+  <h2>Library Management</h2>
+  <p>Sign in to your account</p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Username</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-person"></i></span>
+        <input type="text" name="username" class="form-control" placeholder="Enter username" required autocomplete="username">
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Password</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+        <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required autocomplete="current-password">
+        <button type="button" class="toggle-pw btn" onclick="togglePw()"><i class="bi bi-eye" id="eye-icon"></i></button>
+      </div>
+    </div>
+    <button type="submit" class="btn-login">Sign In <i class="bi bi-arrow-right ms-2"></i></button>
+  </form>
+
+  <div class="hint-box">
+    <strong>Default credentials:</strong><br>
+    Admin: <code>admin</code> / <code>admin123</code><br>
+    User: <code>user</code> / <code>user123</code>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePw() {
+  const pw = document.getElementById('password');
+  const icon = document.getElementById('eye-icon');
+  if (pw.type === 'password') {
+    pw.type = 'text';
+    icon.className = 'bi bi-eye-slash';
+  } else {
+    pw.type = 'password';
+    icon.className = 'bi bi-eye';
+  }
+}
+</script>
+</body>
+</html>

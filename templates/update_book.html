@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-pencil me-2"></i>Update Book</h4>
+<div class="card">
+  <div class="card-header">Update Existing Book</div>
+  <div class="card-body">
+    <form method="POST">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label fw-semibold">Select Book <span class="text-danger">*</span></label>
+          <select name="book_id" class="form-select" id="book_select" onchange="fillBook(this)">
+            <option value="">-- Select a Book to Update --</option>
+            {% for book in books %}
+            <option value="{{ book.id }}" data-title="{{ book.title }}" data-author="{{ book.author }}"
+              data-serial="{{ book.serial_no }}" data-type="{{ book.type }}">
+              {{ book.title }} ({{ book.serial_no }})
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Type</label>
+          <select name="type" id="type" class="form-select">
+            <option value="book">Book</option>
+            <option value="movie">Movie</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Serial Number <span class="text-danger">*</span></label>
+          <input type="text" name="serial_no" id="serial_no" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+          <input type="text" name="title" id="title" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Author / Director <span class="text-danger">*</span></label>
+          <input type="text" name="author" id="author" class="form-control" required>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-2"></i>Update Book</button>
+          <a href="/dashboard" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function fillBook(sel) {
+  const opt = sel.options[sel.selectedIndex];
+  document.getElementById('title').value = opt.dataset.title || '';
+  document.getElementById('author').value = opt.dataset.author || '';
+  document.getElementById('serial_no').value = opt.dataset.serial || '';
+  document.getElementById('type').value = opt.dataset.type || 'book';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-speedometer2 me-2"></i>Dashboard</h4>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="number">{{ total_books }}</div>
+      <div class="label mt-1"><i class="bi bi-book text-primary"></i> Total Books</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="number text-success">{{ books_issued }}</div>
+      <div class="label mt-1"><i class="bi bi-arrow-up-circle text-success"></i> Books Issued</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="number text-warning">{{ pending_fines }}</div>
+      <div class="label mt-1"><i class="bi bi-cash text-warning"></i> Pending Fines</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="number text-danger">{{ total_members }}</div>
+      <div class="label mt-1"><i class="bi bi-people text-danger"></i> Members</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-lightning me-2"></i>Quick Actions (Transactions)</div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="/book_available" class="btn btn-outline-primary"><i class="bi bi-search me-2"></i>Search Available Books</a>
+          <a href="/book_issue" class="btn btn-outline-success"><i class="bi bi-arrow-up-circle me-2"></i>Issue a Book</a>
+          <a href="/return_book" class="btn btn-outline-warning"><i class="bi bi-arrow-down-circle me-2"></i>Return a Book</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if session.role == 'admin' %}
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-shield-check me-2"></i>Admin Panel (Maintenance)</div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="/add_book" class="btn btn-outline-primary"><i class="bi bi-plus-circle me-2"></i>Add New Book</a>
+          <a href="/update_book" class="btn btn-outline-secondary"><i class="bi bi-pencil me-2"></i>Update Book</a>
+          <a href="/update_membership" class="btn btn-outline-info"><i class="bi bi-person-badge me-2"></i>Update Membership</a>
+          <a href="/user_management" class="btn btn-outline-danger"><i class="bi bi-people me-2"></i>Manage Users</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-info-circle me-2"></i>Your Access</div>
+      <div class="card-body">
+        <div class="alert alert-info mb-0">
+          <i class="bi bi-person-check me-2"></i>You are logged in as <strong>User</strong>.<br>
+          You have access to all <strong>Transactions</strong> and <strong>Reports</strong>.<br>
+          Maintenance module is available to Admin only.
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

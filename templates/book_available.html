@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-search me-2"></i>Book Available</h4>
+
+<div class="card mb-4">
+  <div class="card-header">Search Books</div>
+  <div class="card-body">
+    <form method="POST">
+      <input type="hidden" name="action" value="search">
+      {% if error %}
+        <div class="alert alert-danger"><i class="bi bi-exclamation-circle me-2"></i>{{ error }}</div>
+      {% endif %}
+      <div class="row g-3">
+        <div class="col-md-5">
+          <label class="form-label fw-semibold">Book Title</label>
+          <input type="text" name="title" class="form-control" placeholder="Enter book title">
+        </div>
+        <div class="col-md-5">
+          <label class="form-label fw-semibold">Author Name</label>
+          <input type="text" name="author" class="form-control" placeholder="Enter author name">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search me-1"></i>Search</button>
+        </div>
+      </div>
+      <small class="text-muted">Fill at least one field to search.</small>
+    </form>
+  </div>
+</div>
+
+{% if searched %}
+<div class="card">
+  <div class="card-header">Search Results</div>
+  <div class="card-body">
+    {% if books %}
+    <form method="POST">
+      <input type="hidden" name="action" value="issue">
+      <input type="hidden" name="title" value="{{ request.form.get('title','') }}">
+      <input type="hidden" name="author" value="{{ request.form.get('author','') }}">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Serial No</th>
+              <th>Type</th>
+              <th>Select</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for book in books %}
+            <tr>
+              <td>{{ book.title }}</td>
+              <td>{{ book.author }}</td>
+              <td><span class="badge bg-secondary">{{ book.serial_no }}</span></td>
+              <td><span class="badge bg-primary">{{ book.type }}</span></td>
+              <td><input type="radio" name="selected_book" value="{{ book.id }}" class="form-check-input"></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn btn-success mt-2"><i class="bi bi-arrow-up-circle me-2"></i>Issue Selected Book</button>
+    </form>
+    {% else %}
+    <div class="text-center text-muted py-4">
+      <i class="bi bi-search" style="font-size:3rem"></i>
+      <p class="mt-2">No books found matching your search.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

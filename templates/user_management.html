@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-people me-2"></i>User Management</h4>
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Add / Update User</div>
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">User Type</label>
+            <select name="user_type" class="form-select" id="user_type">
+              <option value="new" selected>New User (Default)</option>
+              <option value="existing">Existing User</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+            <input type="text" name="username" class="form-control" placeholder="Enter username" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <div class="input-group">
+              <input type="password" name="password" id="pw_field" class="form-control" placeholder="Enter password">
+              <button type="button" class="btn btn-outline-secondary" onclick="togglePw()"><i class="bi bi-eye" id="pw_eye"></i></button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Role</label>
+            <select name="role" class="form-select">
+              <option value="user" selected>User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary px-4"><i class="bi bi-person-plus me-2"></i>Save User</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">All Users</div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-dark">
+            <tr><th>#</th><th>Username</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            {% for u in users %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td><i class="bi bi-person-circle me-1"></i>{{ u.username }}</td>
+              <td><span class="badge {% if u.role == 'admin' %}bg-danger{% else %}bg-primary{% endif %}">{{ u.role }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function togglePw() {
+  const f = document.getElementById('pw_field');
+  const icon = document.getElementById('pw_eye');
+  if (f.type === 'password') { f.type = 'text'; icon.className = 'bi bi-eye-slash'; }
+  else { f.type = 'password'; icon.className = 'bi bi-eye'; }
+}
+</script>
+{% endblock %}

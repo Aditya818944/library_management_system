@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-cash me-2"></i>Fine Pay</h4>
+<div class="card">
+  <div class="card-header">Fine Payment Details</div>
+  <div class="card-body">
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <label class="form-label text-muted fw-semibold">Book Name</label>
+        <input class="form-control bg-light" value="{{ issue.title }}" readonly>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label text-muted fw-semibold">Author Name</label>
+        <input class="form-control bg-light" value="{{ issue.author }}" readonly>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label text-muted fw-semibold">Serial No</label>
+        <input class="form-control bg-light" value="{{ issue.serial_no }}" readonly>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label text-muted fw-semibold">Issue Date</label>
+        <input class="form-control bg-light" value="{{ issue.issue_date }}" readonly>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label text-muted fw-semibold">Return Date (Original)</label>
+        <input class="form-control bg-light" value="{{ issue.return_date }}" readonly>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label text-muted fw-semibold">Member Name</label>
+        <input class="form-control bg-light" value="{{ issue.member_name }}" readonly>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-bold">Fine Amount (Rs.)</label>
+        <input class="form-control bg-light fw-bold {% if fine.fine_amount > 0 %}text-danger border-danger{% else %}text-success border-success{% endif %}"
+               value="Rs. {{ fine.fine_amount }}" readonly>
+      </div>
+    </div>
+
+    {% if fine.fine_amount > 0 %}
+    <div class="alert alert-warning">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      A fine of <strong>Rs. {{ fine.fine_amount }}</strong> is applicable (Rs. 2 per day late).
+      You must check <strong>"Fine Paid"</strong> to complete the return.
+    </div>
+    {% else %}
+    <div class="alert alert-success">
+      <i class="bi bi-check-circle me-2"></i>No fine applicable. You can confirm the return directly.
+    </div>
+    {% endif %}
+
+    <form method="POST">
+      <div class="row g-3">
+        <div class="col-md-8">
+          <label class="form-label fw-semibold">Remarks <span class="text-muted">(Optional)</span></label>
+          <textarea name="remarks" class="form-control" rows="2" placeholder="Enter any remarks..."></textarea>
+        </div>
+        <div class="col-12">
+          {% if fine.fine_amount > 0 %}
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="fine_paid" id="fine_paid">
+            <label class="form-check-label fw-bold text-danger" for="fine_paid">
+              <i class="bi bi-cash me-1"></i>Fine Paid (Rs. {{ fine.fine_amount }})
+            </label>
+          </div>
+          {% endif %}
+          <button type="submit" class="btn btn-success px-4">
+            <i class="bi bi-check-circle me-2"></i>Complete Return
+          </button>
+          <a href="/return_book" class="btn btn-outline-secondary ms-2">Back</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

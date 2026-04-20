@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-arrow-down-circle me-2"></i>Return Book</h4>
+<div class="card">
+  <div class="card-header">Select Book to Return</div>
+  <div class="card-body">
+    {% if issues %}
+    <form method="POST" id="returnForm">
+      <div class="table-responsive mb-3">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Select</th>
+              <th>Book Title</th>
+              <th>Author</th>
+              <th>Serial No</th>
+              <th>Member</th>
+              <th>Issue Date</th>
+              <th>Return Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for issue in issues %}
+            <tr>
+              <td>
+                <input type="radio" name="issue_id" value="{{ issue.id }}" class="form-check-input"
+                  data-serial="{{ issue.serial_no }}"
+                  data-author="{{ issue.author }}"
+                  data-title="{{ issue.title }}"
+                  data-return="{{ issue.return_date }}"
+                  onclick="fillForm(this)">
+              </td>
+              <td>{{ issue.title }}</td>
+              <td>{{ issue.author }}</td>
+              <td><span class="badge bg-secondary">{{ issue.serial_no }}</span></td>
+              <td>{{ issue.member_name }}</td>
+              <td>{{ issue.issue_date }}</td>
+              <td>{{ issue.return_date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Book Name</label>
+          <input type="text" id="book_name" class="form-control bg-light" placeholder="Auto-filled" readonly>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Author Name</label>
+          <input type="text" id="author_name" class="form-control bg-light" placeholder="Auto-filled" readonly>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Serial No <span class="text-danger">*</span></label>
+          <input type="text" name="serial_no" id="serial_no" class="form-control bg-light" placeholder="Auto-filled on selection" readonly required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Issue Date</label>
+          <input type="text" id="issue_date_display" class="form-control bg-light" placeholder="Auto-filled" readonly>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Return Date <span class="text-danger">*</span></label>
+          <input type="date" name="return_date" id="actual_return" class="form-control" required>
+          <small class="text-muted">Can be edited to earlier or later date.</small>
+        </div>
+        <div class="col-12 mt-3">
+          <button type="submit" class="btn btn-warning px-4"><i class="bi bi-arrow-return-left me-2"></i>Confirm Return</button>
+          <a href="/dashboard" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+      </div>
+    </form>
+    {% else %}
+    <div class="text-center text-muted py-4">
+      <i class="bi bi-check-circle" style="font-size:3rem; color:#388e3c"></i>
+      <p class="mt-2">No books are currently issued.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function fillForm(radio) {
+  document.getElementById('serial_no').value = radio.dataset.serial;
+  document.getElementById('actual_return').value = radio.dataset.return;
+  document.getElementById('book_name').value = radio.dataset.title;
+  document.getElementById('author_name').value = radio.dataset.author;
+  // Find issue date from the row
+  const row = radio.closest('tr');
+  const cells = row.querySelectorAll('td');
+  document.getElementById('issue_date_display').value = cells[5].textContent.trim();
+}
+</script>
+{% endblock %}

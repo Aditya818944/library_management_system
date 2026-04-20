@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Library Management System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+  body { background: #f0f4f8; font-family: 'Segoe UI', sans-serif; }
+  .navbar { background: linear-gradient(135deg, #1a237e, #283593); }
+  .navbar-brand, .nav-link { color: #fff !important; }
+  .nav-link:hover { color: #ffd54f !important; }
+  .sidebar { background: #1a237e; min-height: calc(100vh - 56px); padding-top: 20px; }
+  .sidebar a { color: #b0bec5; display: block; padding: 10px 20px; text-decoration: none; border-radius: 6px; margin: 2px 8px; }
+  .sidebar a:hover, .sidebar a.active { background: #283593; color: #ffd54f; }
+  .sidebar .section-title { color: #78909c; font-size: 11px; text-transform: uppercase; padding: 10px 20px 4px; letter-spacing: 1px; }
+  .main-content { padding: 24px; }
+  .card { border: none; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .card-header { background: #1a237e; color: white; border-radius: 12px 12px 0 0 !important; padding: 14px 20px; font-weight: 600; }
+  .btn-primary { background: #1a237e; border-color: #1a237e; }
+  .btn-primary:hover { background: #283593; border-color: #283593; }
+  .stat-card { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .stat-card .number { font-size: 2rem; font-weight: 700; color: #1a237e; }
+  .stat-card .label { color: #607d8b; font-size: 0.9rem; }
+  .badge-admin { background: #c62828; }
+  .badge-user { background: #1565c0; }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="/dashboard"><i class="bi bi-book-half me-2"></i>Library MS</a>
+    <div class="ms-auto d-flex align-items-center gap-3">
+      {% if session.role == 'admin' %}
+      <span class="badge bg-warning text-dark"><i class="bi bi-shield-check me-1"></i>Admin</span>
+      {% else %}
+      <span class="badge bg-info text-dark"><i class="bi bi-person me-1"></i>User</span>
+      {% endif %}
+      <span class="text-white">{{ session.user }}</span>
+      <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="d-flex">
+  <div class="sidebar" style="width:220px; min-width:220px;">
+    <div class="section-title">Transactions</div>
+    <a href="/book_available"><i class="bi bi-search me-2"></i>Book Available</a>
+    <a href="/book_issue"><i class="bi bi-arrow-up-circle me-2"></i>Book Issue</a>
+    <a href="/return_book"><i class="bi bi-arrow-down-circle me-2"></i>Return Book</a>
+
+    <div class="section-title mt-3">Reports</div>
+    <a href="/book_available"><i class="bi bi-list-ul me-2"></i>Search Books</a>
+
+    {% if session.role == 'admin' %}
+    <div class="section-title mt-3">Maintenance</div>
+    <a href="/add_book"><i class="bi bi-plus-circle me-2"></i>Add Book</a>
+    <a href="/update_book"><i class="bi bi-pencil me-2"></i>Update Book</a>
+    <a href="/update_membership"><i class="bi bi-person-badge me-2"></i>Membership</a>
+    <a href="/user_management"><i class="bi bi-people me-2"></i>Users</a>
+    {% endif %}
+  </div>
+
+  <div class="flex-grow-1 main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-4 fw-bold" style="color:#1a237e"><i class="bi bi-arrow-up-circle me-2"></i>Book Issue</h4>
+<div class="card">
+  <div class="card-header">Issue a Book to Member</div>
+  <div class="card-body">
+    <form method="POST">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Book Name <span class="text-danger">*</span></label>
+          <select name="book_id" class="form-select" id="book_select" required>
+            <option value="">-- Select Book --</option>
+            {% for book in books %}
+            <option value="{{ book.id }}" data-author="{{ book.author }}"
+              {% if preselect_book == book.id|string %}selected{% endif %}>
+              {{ book.title }} ({{ book.serial_no }}) - {{ book.type|upper }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Author Name</label>
+          <input type="text" class="form-control bg-light" id="author_field" placeholder="Auto-filled on book selection" readonly>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Member Name <span class="text-danger">*</span></label>
+          <select name="member_id" class="form-select" required>
+            <option value="">-- Select Member --</option>
+            {% for member in members %}
+            <option value="{{ member.id }}">{{ member.name }} ({{ member.membership_no }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Issue Date <span class="text-danger">*</span></label>
+          <input type="date" name="issue_date" class="form-control" id="issue_date" min="{{ today }}" value="{{ today }}" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Return Date <span class="text-danger">*</span></label>
+          <input type="date" name="return_date" class="form-control" id="return_date" value="{{ default_return }}" required>
+          <small class="text-muted">Can be edited to earlier date. Max 15 days from issue date.</small>
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">Remarks <span class="text-muted">(Optional)</span></label>
+          <textarea name="remarks" class="form-control" rows="2" placeholder="Any remarks..."></textarea>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-circle me-2"></i>Issue Book</button>
+          <a href="/dashboard" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+// Auto-fill author when book selected
+document.getElementById('book_select').addEventListener('change', function() {
+  const opt = this.options[this.selectedIndex];
+  document.getElementById('author_field').value = opt.dataset.author || '';
+});
+// Auto-set return date when issue date changes (15 days ahead)
+document.getElementById('issue_date').addEventListener('change', function() {
+  const d = new Date(this.value);
+  d.setDate(d.getDate() + 15);
+  const maxReturn = d.toISOString().split('T')[0];
+  const returnField = document.getElementById('return_date');
+  returnField.value = maxReturn;
+  returnField.max = maxReturn;
+  returnField.min = this.value;
+});
+// Trigger on load if preselected
+window.addEventListener('load', function() {
+  const sel = document.getElementById('book_select');
+  if (sel.value) {
+    const opt = sel.options[sel.selectedIndex];
+    document.getElementById('author_field').value = opt.dataset.author || '';
+  }
+});
+</script>
+{% endblock %}
