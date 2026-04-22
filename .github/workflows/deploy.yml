@@ -38,10 +38,10 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-                docker pull adity0305/lib-app:latest
-  
-               docker stop lib-app || true
-              docker rm lib-app || true
-  
-             docker run -d -p 80:5000 --name lib-app adity0305/lib-app:latest
+          script: |
+            docker pull adity0305/lib-app:latest
+
+            docker stop lib-app || true
+            docker rm lib-app || true
+
+            docker run -d -p 80:5000 --name lib-app adity0305/lib-app:latest
